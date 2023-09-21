@@ -8,7 +8,7 @@ os는 상관없다
 2023년 기준으로 golang과 Protocol Buffer는 꾸준히 기능이 업데이트 되고 있기에 시간이 지날수록 새로운 기능이나 기존의 기능이 없어지는 경우가 많다. 정보를 정확히 알수있는 곳은 공식 문서를 보는 것이다. 따라서 url을 따라가서 학습하자.  
 
 golang - https://go.dev/doc/  
-Protocol Buffer - https://protobuf.dev/
+Protocol Buffer - https://protobuf.dev/  
 grpc - https://grpc.io/docs/what-is-grpc/ , https://grpc.io/docs/languages/go/  
 
 
