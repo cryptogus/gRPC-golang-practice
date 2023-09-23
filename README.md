@@ -11,7 +11,10 @@ golang - https://go.dev/doc/
 Protocol Buffer - https://protobuf.dev/  
 grpc - https://grpc.io/docs/what-is-grpc/ , https://grpc.io/docs/languages/go/  
 
+## grpc 예제 설명서
+`route_guide` 디렉터리는 grpc 공식 홈페이지에서 제공하는 go언어 기반 예제이다. 이에 대한 설명을 md파일로 정리하였다.  
 
+[grpc 예제 설명](https://github.com/cryptogus/gRPC-golang-practice/blob/main/route_guide/description.md)
 ## Protocol Buffer
 ```shell
 PS> protoc --proto_path=.\ --go_out=.\ --go-grpc_out=.\ .\practice_crypto.proto
