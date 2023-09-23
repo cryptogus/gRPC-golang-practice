@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "/pb_in";
+
+service AES {
+    rpc EncryptAES(Input) returns (Output) {}
+    rpc DecryptAES(Input) returns (Output) {}
+}
+
+message Input {
+    bytes key = 1;
+    bytes text = 2;
+}
+
+message Output {
+    bytes text = 1;
+}
