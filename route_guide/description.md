@@ -234,8 +234,9 @@ message Point {
   int32 latitude = 1;
   int32 longitude = 2;
 }
-로 필드들이 latitude 처럼 소문자로 시작한다. 그런데 ` point.Latitude`, `point.Longitude` 로 사용하고 있다. 무슨말을 하고싶은거냐?? `.proto`에서 소문자로 정의한 필드들은 사용할 때 맨 앞글자를 대문자로 바꾸어 사용해야한다. 
 ```
+로 필드들이 latitude 처럼 소문자로 시작한다. 그런데 ` point.Latitude`, `point.Longitude` 로 사용하고 있다. 무슨말을 하고싶은거냐??   
+**`.proto`에서 소문자로 정의한 필드들은 사용할 때 맨 앞글자를 대문자로 바꾸어 사용해야한다.**
 ##  Creating the client
 
 윗 부분을 이해했다면 여기부터는 공식 설명을 보아도 이해가 충분히 가능하다.
