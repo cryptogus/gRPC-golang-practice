@@ -205,10 +205,37 @@ server에 protocol buffer에서 적어놓았던 함수들을 구현해야한다.
     3. Register our service implementation with the gRPC server. → `pb.RegisterRouteGuideServer`의 인자로 위에서 정의했던 `routeGuideServer` 구조체의 주소가 들어간다.
     4. Call `Serve()` on the server with our port details to do a blocking wait until the process is killed or `Stop()` is called.
 
-## `route_guide_grpc.pb.go` 에 정의된 함수들 이름의 정체
-이쯤 되면 눈치 챘을테지만 `.proto` 파일을 컴파일 하게되면 자동으로 함수들이 생성된다. 근데 이 함수들의 이름에 규칙이 있다는 생각이 들지 않는가?  예를 들면  `RegisterRouteGuideServer`함수라던가 `UnimplementedRouteGuideServer` 라던가 분명 중복적으로 들어가는게 있다. 바로 `RouteGuide`다.  
-이유는 단순한데 `.proto` 파일의 `service` 명을 `RouteGuide` 로 지었기 때문이다. 위에 protocol buffer를 다시한번 보면 알 수 있다. 그럼 만약 `AES`라고 `service` 명을 지으면?? `RouteGuide` 대신 모든 생성되는 것들에 `AES`가 들어갈 것이다. 즉, 규칙은 `Register<서비스 이름>Server` 등 이런식으로 통일 되어있다는 것이다.
+## `route_guide_grpc.pb.go` 에 정의된 함수들 이름과 변수 사용법
 
+이쯤 되면 눈치 챘을테지만 `.proto` 파일을 컴파일 하게되면 자동으로 함수들이 생성된다. 근데 이 함수들의 이름에 규칙이 있다는 생각이 들지 않는가?  예를 들면  `RegisterRouteGuideServer`함수라던가 `UnimplementedRouteGuideServer` 라던가 분명 중복적으로 들어가는게 있다. 바로 `RouteGuide`다.  
+이유는 단순한데 `.proto` 파일의 `service` 명을 `RouteGuide` 로 지었기 때문이다. 위에 protocol buffer를 다시한번 보면 알 수 있다. 그럼 만약 `AES`라고 `service` 명을 지으면?? `RouteGuide` 대신 모든 생성되는 것들에 `AES`가 들어갈 것이다. 즉, 규칙은 `Register<서비스 이름>Server` 등 이런식으로 통일 되어있다는 것이다.  
+
+또한 위의 예시를 보다 보면 의문이 드는게 있을 것이다. 바로 `.proto`에 정의했던 변수의 사용이다.
+아직 설명하진 않았지만 `client.go`의 함수를 하나 가져오자.
+```go
+import pb "google.golang.org/grpc/examples/route_guide/routeguide"
+
+// printFeature gets the feature for the given point.
+func printFeature(client pb.RouteGuideClient, point *pb.Point) {
+	log.Printf("Getting feature for point (%d, %d)", point.Latitude, point.Longitude)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	feature, err := client.GetFeature(ctx, point)
+	if err != nil {
+		log.Fatalf("client.GetFeature failed: %v", err)
+	}
+	log.Println(feature)
+}
+```
+여기서 `point *pb.Point` 를 보면 자료형이 `pb.Point` (.proto에 정의했던 message 중 하나)이고 `point`가 변수명인 포인터이다. 그런데 아래 `log.Printf("Getting feature for point (%d, %d)", point.Latitude, point.Longitude)`를 살펴보자.  
+분명 `.proto`를 보면
+```proto
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+로 필드들이 latitude 처럼 소문자로 시작한다. 그런데 ` point.Latitude`, `point.Longitude` 로 사용하고 있다. 무슨말을 하고싶은거냐?? `.proto`에서 소문자로 정의한 필드들은 사용할 때 맨 앞글자를 대문자로 바꾸어 사용해야한다. 
+```
 ##  Creating the client
 
 윗 부분을 이해했다면 여기부터는 공식 설명을 보아도 이해가 충분히 가능하다.
